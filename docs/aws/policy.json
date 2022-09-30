@@ -11,8 +11,16 @@
       "Effect": "Allow",
       "Resource": "*"
     },
-    { "Action": "cloudformation:*", "Effect": "Allow", "Resource": "*" },
-    { "Action": "cloudwatch:*", "Effect": "Allow", "Resource": "*" },
+    {
+      "Action": "cloudformation:*",
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": "cloudwatch:*",
+      "Effect": "Allow",
+      "Resource": "*"
+    },
     {
       "Action": [
         "ec2:AuthorizeSecurityGroupIngress",
@@ -46,7 +54,11 @@
       "Effect": "Allow",
       "Resource": "*"
     },
-    { "Action": "elasticloadbalancing:*", "Effect": "Allow", "Resource": "*" },
+    {
+      "Action": "elasticloadbalancing:*",
+      "Effect": "Allow",
+      "Resource": "*"
+    },
     {
       "Action": "elasticfilesystem:*",
       "Effect": "Allow",
@@ -78,7 +90,6 @@
       "Effect": "Allow",
       "Resource": "*"
     },
-
     {
       "Action": [
         "route53:CreateHostedZone",
@@ -90,6 +101,10 @@
       "Effect": "Allow",
       "Resource": "*"
     },
-    { "Action": "servicediscovery:*", "Effect": "Allow", "Resource": "*" }
+    {
+      "Action": "servicediscovery:*",
+      "Effect": "Allow",
+      "Resource": "*"
+    }
   ]
 }
