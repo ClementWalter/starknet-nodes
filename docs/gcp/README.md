@@ -53,6 +53,12 @@ kubectl run starknet-mainnet \
  --env="PATHFINDER_ETHEREUM_API_URL=${PATHFINDER_ETHEREUM_API_URL_MAINNET}" \
  --command -- /bin/bash -c 'curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/mainnet/mainnet.sqlite --output /usr/share/pathfinder/data/mainnet.sqlite && pathfinder'
 kubectl expose pod starknet-mainnet --port=9545 --target-port=9545 --type=LoadBalancer
+kubectl run starknet-goerli \
+ --image=clementwalter/pathfinder-curl \
+ --port=9545 \
+ --env="PATHFINDER_ETHEREUM_API_URL=${PATHFINDER_ETHEREUM_API_URL_GOERLI}" \
+ --command -- /bin/bash -c 'curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/goerli/goerli.sqlite --output /usr/share/pathfinder/data/goerli.sqlite && pathfinder'
+kubectl expose pod starknet-goerli --port=9545 --target-port=9545 --type=LoadBalancer
 ```
 
 You can then retrieve the node urls using :
@@ -87,4 +93,5 @@ To delete your nodes and clean everything, just run:
 ```bash
 kubectl delete pods --all
 kubectl delete services --all
+gcloud container clusters delete starknet-nodes
 ```

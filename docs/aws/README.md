@@ -53,12 +53,12 @@ docker compose ps --format json > nodes.json
 You can then check that the node are running using for example `curl`:
 
 ```bash
-curl '<DNS name>:9545' \
+curl `docker compose ps --format json | jq ".[0].Publishers[0].URL" | tr -d '"'` \
   -H 'content-type: application/json' \
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
   --compressed | jq .result | xxd -rp
 # SN_GOERLI
-curl '<DNS name>:9546' \
+curl `docker compose ps --format json | jq ".[1].Publishers[0].URL" | tr -d '"'` \
   -H 'content-type: application/json' \
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
   --compressed | jq .result | xxd -rp
@@ -86,4 +86,5 @@ docker context use starknet-ecs
 docker compose down
 docker context use default
 docker context rm starknet-ecs
+aws efs describe-file-systems | jq ".FileSystems[].FileSystemId" | xargs -L1 aws efs delete-file-system --file-system-id $1
 ```
