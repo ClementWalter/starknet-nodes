@@ -65,6 +65,9 @@ To delete your nodes and clean everything, just run:
 ```bash
 docker context use starknet-aci
 docker compose down
+docker volume rm starknetnodes/goerli-data
+docker volume rm starknetnodes/mainnet-data
 docker context use default
 docker context rm starknet-aci
+
 ```
