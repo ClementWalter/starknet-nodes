@@ -1,28 +1,46 @@
 # Running a node on Microsoft Azure
 
-TL;DR copy/paste:
+## Azure setup
+
+There is also a [Docker<>Azure ACI integration](https://docs.docker.com/cloud/aci-integration/) using docker context and the strategy is consequently similar to the one above.
+However, Azure made it easier by removing the need for using their CLI nor generating credentials. In short, the whole [AWS CLI Setup](#aws-cli-setup) section boils down to:
 
 ```bash
 docker login azure
+```
+
+However, it may be convenient to still install the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) for later manipulations.
+
+We are almost done with Azure config. You just need to [create a Resource group](https://portal.azure.com/?quickstart=true#create/Microsoft.ResourceGroup) for the nodes and chose an appropriate region for your application.
+
+If you installed the cli, just run:
+
+```bash
+az configure --defaults location=francecentral
+az group create --name starknet-nodes
+```
+
+## Cloud deployment
+
+### TL;DR copy/paste
+
+```bash
 docker context create aci starknet-aci
 docker context use starknet-aci
 docker volume create goerli-data --storage-account starknetnodes
 docker volume create mainnet-data --storage-account starknetnodes
+curl https://raw.githubusercontent.com/ClementWalter/starknet-nodes/main/docker-compose.yml -o docker-compose.yml
+curl https://raw.githubusercontent.com/ClementWalter/starknet-nodes/main/docs/azure/docker-compose.azure.yml -o docker-compose.azure.yml
 docker compose -f docker-compose.yml -f docs/azure/docker-compose.azure.yml up
 ```
 
-## Azure Setup
+### Detailed story
 
-You may want to create a subscription for the nodes (not available for free single user account)
-[create a Subscription](https://portal.azure.com/?quickstart=true#view/Microsoft_Azure_SubscriptionManagement/SubscriptionCreateBlade)
+The `docker volume` command creates [File shares](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-introduction).
+The [storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview) (`starknetnodes`) is created if it does not exist. These volumes are then used in the `docker-compose.azure.yml` azure overriding configuration.
 
-Then:
-
-- [create a Resource group](https://portal.azure.com/?quickstart=true#create/Microsoft.ResourceGroup) for the nodes and chose an appropriate region for your application
-
-## Deployment
-
-We use the docker aci context to deploy an AWS Cloudformation stack:
+When running `docker compose up`, the `aci` context creates [Azure Container Instances](https://azure.microsoft.com/en-us/products/container-instances).
+Eventually, the commands are:
 
 - create a docker aci context: `docker context create aci <chose a context name`>
   - use the above created resource group
@@ -42,16 +60,26 @@ docker ps
 You can then check that the node are running using curl:
 
 ```bash
-curl '<PORTS value for starknet-goerli>' \
+curl $(docker ps --format json | jq '.[] | select( .ID | contains("goerli") ) | .Ports[0]' -r | cut -d "-" -f 1) \
   -H 'content-type: application/json' \
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
   --compressed | jq .result | xxd -rp
 # SN_GOERLI
-curl '<PORTS value for starknet-mainnet>' \
+curl $(docker ps --format json | jq '.[] | select( .ID | contains("mainnet") ) | .Ports[0]' -r | cut -d "-" -f 1) \
   -H 'content-type: application/json' \
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
   --compressed | jq .result | xxd -rp
 # SN_MAIN
+```
+
+You can find info about your deployment and containers in the Resource group's page. To delete your nodes and clean everything, just run:
+
+```bash
+docker context use starknet-aci
+docker compose down
+docker context use default
+docker context rm starknet-aci
+az group delete --name starknet-nodes
 ```
 
 ## Monitoring
@@ -69,5 +97,4 @@ docker volume rm starknetnodes/goerli-data
 docker volume rm starknetnodes/mainnet-data
 docker context use default
 docker context rm starknet-aci
-
 ```

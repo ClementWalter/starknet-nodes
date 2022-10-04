@@ -43,6 +43,17 @@ echo 0x534e5f4d41494e | xxd -rp
 # SN_MAIN
 ```
 
+If you use the backup files, you can check the block position of your node:
+
+```bash
+curl <IP address> \
+  -H 'content-type: application/json' \
+  --data-raw '{"method":"starknet_syncing","jsonrpc":"2.0","params":[],"id":0}' \
+  --compressed | \
+  jq '.result | { starting_block_num,current_block_num,highest_block_num } | to_entries[] | .value' -r | \
+  xargs -L1 printf "%d\n" $1
+```
+
 ## Cloud deployment
 
 Docker has built-in integrations with [AWS](https://docs.docker.com/cloud/ecs-integration/) and [Azure](https://docs.docker.com/cloud/aci-integration/) using `docker context`.
