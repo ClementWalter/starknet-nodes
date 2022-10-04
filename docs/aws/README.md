@@ -159,12 +159,6 @@ aws ecs update-service \
 The deployed stack can be monitored on the [AWS CloudFormation home page](https://eu-west-3.console.aws.amazon.com/cloudformation/home).
 All the `aws cloudformation` commands are available for managing the stack.
 The `docker compose logs` command will output the logs otherwise found in CloudWatch.
-The `docker compose convert` command will generate the corresponding yaml file to be used with `aws cloudformation deploy` for further manual tweaking.
-
-```bash
-docker compose convert > stack.yaml
-aws cloudformation deploy --template-file stack.yml --stack-name pathfinder-node --capabilities CAPABILITY_IAM --profile pathfinder-deployer
-```
 
 ## Cleaning
 

@@ -72,16 +72,6 @@ curl $(docker ps --format json | jq '.[] | select( .ID | contains("mainnet") ) |
 # SN_MAIN
 ```
 
-You can find info about your deployment and containers in the Resource group's page. To delete your nodes and clean everything, just run:
-
-```bash
-docker context use starknet-aci
-docker compose down
-docker context use default
-docker context rm starknet-aci
-az group delete --name starknet-nodes
-```
-
 ## Monitoring
 
 You can find info about your deployment and containers in the Resource group's page.
