@@ -18,6 +18,24 @@ services:
         curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/goerli/goerli.sqlite --output /usr/share/pathfinder/data/goerli.sqlite
         pathfinder
 
+  starknet-goerli-2:
+    image: clementwalter/pathfinder-curl:latest
+    environment:
+      - RUST_LOG=info
+      - PATHFINDER_ETHEREUM_API_URL=${PATHFINDER_ETHEREUM_API_URL_GOERLI}
+      - PATHFINDER_HTTP_RPC_ADDRESS=0.0.0.0:9547
+    volumes:
+      - goerli-data-2:/usr/share/pathfinder/data
+    ports:
+      - 9547:9547
+    entrypoint: ["/usr/bin/tini", "--"]
+    command:
+      - /bin/bash
+      - -c
+      - |
+        curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/testnet2/testnet2.sqlite --output /usr/share/pathfinder/data/testnet2.sqlite
+        pathfinder --testnet2
+
   starknet-mainnet:
     image: clementwalter/pathfinder-curl:latest
     environment:
@@ -38,4 +56,5 @@ services:
 
 volumes:
   goerli-data:
+  goerli-data-2:
   mainnet-data:

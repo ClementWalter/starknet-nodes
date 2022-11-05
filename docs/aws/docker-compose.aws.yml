@@ -5,6 +5,11 @@ volumes:
     # EFS access point config, see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-accesspoint.html
       uid: 0
       gid: 0
+  goerli-data-2:
+    driver_opts:
+    # EFS access point config, see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-accesspoint.html
+      uid: 0
+      gid: 0
   mainnet-data:
     driver_opts:
     # EFS access point config, see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-accesspoint.html

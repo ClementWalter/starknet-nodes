@@ -42,6 +42,12 @@ kubectl run starknet-goerli \
  --env="PATHFINDER_ETHEREUM_API_URL=${PATHFINDER_ETHEREUM_API_URL_GOERLI}" \
  --command -- /bin/bash -c 'curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/goerli/goerli.sqlite --output /usr/share/pathfinder/data/goerli.sqlite && pathfinder'
 kubectl expose pod starknet-goerli --port=9545 --target-port=9545 --type=LoadBalancer
+kubectl run starknet-goerli-2 \
+ --image=clementwalter/pathfinder-curl \
+ --port=9545 \
+ --env="PATHFINDER_ETHEREUM_API_URL=${PATHFINDER_ETHEREUM_API_URL_GOERLI}" \
+ --command -- /bin/bash -c 'curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/testnet2/testnet2.sqlite --output /usr/share/pathfinder/data/testnet2.sqlite && pathfinder --testnet2'
+kubectl expose pod starknet-goerli-2 --port=9545 --target-port=9545 --type=LoadBalancer
 ```
 
 ### Detailed story
@@ -68,6 +74,11 @@ curl $(kubectl get service starknet-goerli --output=json | jq ".status.loadBalan
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
   --compressed | jq .result | xxd -rp
 # SN_GOERLI
+curl $(kubectl get service starknet-goerli-2 --output=json | jq ".status.loadBalancer.ingress[0].ip" -r):9545 \
+  -H 'content-type: application/json' \
+  --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
+  --compressed | jq .result | xxd -rp
+# SN_GOERLI2
 curl $(kubectl get service starknet-mainnet --output=json | jq ".status.loadBalancer.ingress[0].ip" -r):9545 \
   -H 'content-type: application/json' \
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \

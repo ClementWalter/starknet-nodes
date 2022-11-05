@@ -6,6 +6,11 @@ volumes:
     driver_opts:
       share_name: goerli-data
       storage_account_name: starknetnodes
+  goerli-data-2:
+    driver: azure_file
+    driver_opts:
+      share_name: goerli-data-2
+      storage_account_name: starknetnodes
   mainnet-data:
     driver: azure_file
     driver_opts:
