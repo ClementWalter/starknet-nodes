@@ -30,17 +30,18 @@ The mainnet node runs on port 9546 while the goerli one runs on port 9545. You c
 curl '0.0.0.0:9545' \
   -H 'content-type: application/json' \
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
-  --compressed
-# {"jsonrpc":"2.0","result":"0x534e5f474f45524c49","id":0}
-echo 0x534e5f474f45524c49 | xxd -rp
+  --compressed | jq .result | xxd -rp
 # SN_GOERLI
 curl '0.0.0.0:9546' \
   -H 'content-type: application/json' \
   --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
-  --compressed
-# {"jsonrpc":"2.0","result":"0x534e5f4d41494e","id":0}
-echo 0x534e5f4d41494e | xxd -rp
+  --compressed | jq .result | xxd -rp
 # SN_MAIN
+curl '0.0.0.0:9547' \
+  -H 'content-type: application/json' \
+  --data-raw '{"method":"starknet_chainId","jsonrpc":"2.0","params":[],"id":0}' \
+  --compressed | jq .result | xxd -rp
+# SN_GOERLI2
 ```
 
 If you use the backup files, you can check the block position of your node:
