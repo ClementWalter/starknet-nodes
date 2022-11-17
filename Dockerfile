@@ -1,4 +1,4 @@
-FROM eqlabs/pathfinder:v0.3.8
+FROM eqlabs/pathfinder:v0.4.0
 
 USER root
 RUN apt-get update && apt-get install -y curl
