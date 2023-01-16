@@ -26,8 +26,11 @@ mkdir backup/goerli
 mkdir backup/mainnet
 mkdir backup/testnet2
 
-curl https://raw.githubusercontent.com/ClementWalter/starknet-nodes/main/docker-compose.yml -o docker-compose.yml
+curl https://raw.githubusercontent.com/ClementWalter/starknet-nodes/main/backup/docker-compose.yml -o docker-compose.yml
 curl https://raw.githubusercontent.com/ClementWalter/starknet-nodes/main/backup/node_backup.py -o node_backup.py
+curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/goerli/goerli.sqlite --output ./data/goerli/goerli.sqlite
+curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/testnet2/testnet2.sqlite --output ./data/testnet2/testnet2.sqlite
+curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/mainnet/mainnet.sqlite --output ./data/mainnet/mainnet.sqlite
 
 crontab -e
 0 0 * * * /usr/bin/python3 /home/ec2-user/node_backup.py
