@@ -21,6 +21,7 @@ services:
       - ./data/testnet2:/usr/share/pathfinder/data
     ports:
       - 9547:9547
+    command: --network testnet2
 
   starknet-mainnet:
     image: eqlabs/pathfinder:latest
