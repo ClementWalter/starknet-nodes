@@ -34,7 +34,7 @@ services:
       - -c
       - |
         curl https://pathfinder-starknet-node-backup.s3.eu-west-3.amazonaws.com/testnet2/testnet2.sqlite --output /usr/share/pathfinder/data/testnet2.sqlite
-        pathfinder --testnet2
+        pathfinder --network testnet2
 
   starknet-mainnet:
     image: clementwalter/pathfinder-curl:latest
