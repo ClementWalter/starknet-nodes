@@ -7,12 +7,13 @@ yes | sudo yum install docker
 sudo usermod -a -G docker ec2-user
 id ec2-user
 newgrp docker
-sudo yum install python3-pip
-sudo pip3 install docker-compose # with root access
+yes | sudo yum install python3-pip
 sudo systemctl enable docker.service
 sudo systemctl start docker.service
+yes | yum install cronie
 
 pip3 install boto3
+pip3 install docker-compose
 echo "export PATHFINDER_ETHEREUM_API_URL_GOERLI=https://goerli.infura.io/v3/${INFURA_KEY}" >> .bashrc
 echo "export PATHFINDER_ETHEREUM_API_URL_MAINNET=https://mainnet.infura.io/v3/${INFURA_KEY}" >> .bashrc
 exec $SHELL

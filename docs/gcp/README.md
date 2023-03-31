@@ -17,9 +17,18 @@ Then, we set for the project the region and zone we want to deploy in (see [regi
 For example:
 
 ```bash
-gcloud projects create starknet-nodes --name Starknet-nodes
+gcloud projects create starknet-nodes-1234 --name Starknet-nodes
 gcloud config set compute/region europe-west1
 gcloud config set compute/zone europe-west1-b
+gcloud config set project starknet-nodes-1234
+```
+
+Note: the project id (`starknet-nodes-1234` in the above example) is unique not to your account but to the whole Google Cloud.
+
+You may need to enable few services:
+
+```bash
+gcloud services enable container.googleapis.com compute.googleapis.com containerregistry.googleapis.com
 ```
 
 ## Cloud deployment
@@ -27,7 +36,7 @@ gcloud config set compute/zone europe-west1-b
 ### TL;DR copy/paste
 
 ```bash
-gcloud container clusters create starknet-nodes
+gcloud container clusters create starknet-nodes --disk-size 100
 gcloud container clusters get-credentials starknet-nodes
 export $(xargs <.env)
 kubectl run starknet-mainnet \
